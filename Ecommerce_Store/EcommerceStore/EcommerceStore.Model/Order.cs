@@ -7,11 +7,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 namespace EcommerceStore.Model
 {
+    [Table("Order",Schema ="dbo")]
     public class Order
     {
         public int Id { get; set; }
-        [ForeignKey("AdminUser")]
-        public int AdminUserId { get; set; }
+
+        [Key]
+        public string AdminUserId { get; set; }
+        [ForeignKey("AdminUserId")]
         public virtual AdminUser adminUser { get; set; }
         public decimal Total { get; set; }
         public DateTime? Create_at { get; set; }

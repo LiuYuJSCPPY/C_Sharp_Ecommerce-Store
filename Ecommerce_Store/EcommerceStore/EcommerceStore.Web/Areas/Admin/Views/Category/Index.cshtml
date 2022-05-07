@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EcommerceStore.Model.Category>
+
+@{
+    ViewBag.Title = "CategoryIndex";
+}
+
+<h1 class="mt-4">CategoryIndex</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+    <li class="breadcrumb-item active">Sidenav Light</li>
+</ol>
+
+<div class="row mb-3">
+    <div class="col col-lg-12">
+        <form>
+            <div class="input-group">
+
+                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons">
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+                <button id="ActionButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Action">
+                    Create
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+
+<div class="row">
+    <div class="col col-lg-12">
+        @{
+            Html.RenderPartial("_Listing", Model);
+        }
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="Action" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    
+       
+    </div>
+</div>
+
+<script>
+    $("#ActionButton").click(function () {
+        $.ajax({
+            url: "@Url.Action("Action", "Category")",
+            type: "Get",
+        }).done(function (response) {
+            $("#Action .modal-dialog").html(response);
+        });
+    });
+</script>

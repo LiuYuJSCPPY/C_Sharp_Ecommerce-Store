@@ -14,15 +14,14 @@ namespace EcommerceStore.Model
     [Table("AdminUser",Schema ="dbo")]
     public class AdminUser : IdentityUser
     {
-
-        public string UserName { get; set; }
+       
         public string FristName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }
         public string Telephone { get; set; }
         public string UserImagePath { get; set; }
 
-
+     
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AdminUser> manager)
         {
@@ -32,8 +31,7 @@ namespace EcommerceStore.Model
             return userIdentity;
         }
 
-        public virtual Order Order { get; set; }
-        public virtual Cart Cart { get; set; }
+       
     }
    
 }
