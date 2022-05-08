@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -35,10 +36,53 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
             return PartialView("_Action");
         }
 
-        [HttpPost]
-        public JsonResult Action(HttpPostedFileBase CategoryImagePath)
-        {
 
+
+        [HttpPost]
+        public JsonResult Action([Bind(Include = "Id,Name,CategoryImage")] Category CategoryModel,HttpPostedFileBase CategoryImage)
+        {
+            JsonResult json = new JsonResult();
+
+            bool result = false;
+
+
+
+            Category category = new Category();
+
+            string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
+            if (!Directory.Exists(FilePath))
+            {
+                Directory.CreateDirectory(FilePath);
+            }
+            string FileName = Path.GetFileName(CategoryImage.FileName);
+            string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
+            string exesption = Path.GetExtension(CategoryImage.FileName);
+            string path = Path.Combine(FilePath, _FileName);
+            category.Name = CategoryModel.Name;
+            category.CategoryImage = "~/Areas/Admin/Image/CategoryImage/" + _FileName;
+            if(exesption.ToLower() == ".jpg" || exesption.ToLower() == ".jepg" || exesption.ToLower() == ".png")
+            {
+                if(CategoryImage.ContentLength < 10000000)
+                {
+                    result = categorySerivce.SaveEcommerceStoreCategory(category);
+                    if (result)
+                    {
+                        CategoryImage.SaveAs(path);
+                    }
+                }
+            }
+
+            if (result)
+            {
+                json.Data = new { Success = true };
+            }
+            else
+            {
+                json.Data = new { Success = false ,Message = "上傳時出現問題!"};
+            }
+
+
+            return json;
         }
 
         // GET: Admin/Category/Create

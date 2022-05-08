@@ -6,22 +6,29 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-        <form class="row g-3">
+
+        <form class="row g-3" id="ActionForm">
             <div class="mb-3">
                 <label for="formGroupExampleInput" class="form-label">分類的名字:</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="分類的名字">
+                <input type="text" class="form-control" name="Name" id="CategoryName" placeholder="分類的名字">
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">上傳圖案:</label>
-                <input class="form-control" type="file" id="formFile">
+                <input class="form-control" type="file" name="CategoryImage" id="formFile">
                 <img id="ActionImage" src="#" />
             </div>
         </form>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button id="DataSaveButton" type="button" class="btn btn-primary">儲存</button>
     </div>
+</div>
+
+
+<div id="UpdataError" >
+
 </div>
 
 <script>
@@ -39,4 +46,34 @@
         }
     };
 
+
+    
+    
+
+    $("#DataSaveButton").click(function () {
+
+        var formdate = new FormData();
+        var file = $("#formFile")[0].files[0];
+        var Name = $("#CategoryName").val();
+        formdate.append("Name", Name);
+        formdate.append("CategoryImage", file);
+
+
+        $.ajax({
+            url: "@Url.Action("Action", "Category")",
+            type: "post",
+            processData: false,
+            contentType: false,
+            data: formdate,
+        }).done(function (response) {
+            debugger;
+            if (response.Success) {
+                location.reload();
+            } else {
+                $("#UpdataError").html(response.Message);
+            }
+        });
+    });
+
+    
 </script>

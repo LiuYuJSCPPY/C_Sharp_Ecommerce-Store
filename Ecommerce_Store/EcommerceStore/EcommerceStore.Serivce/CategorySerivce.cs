@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EcommerceStore.Data;
 using EcommerceStore.Model;
+using System.Web;
+
 
 namespace EcommerceStore.Serivce
 {
@@ -16,6 +18,16 @@ namespace EcommerceStore.Serivce
             return context.Categories.ToList();
         }
 
+
+
+        public bool SaveEcommerceStoreCategory(Category category)
+        {
+            var context = new EcommerceStoreContext();
+
+            context.Categories.Add(category);
+            return context.SaveChanges() > 0;
+        }
+       
        
     }
 }
