@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using EcommerceStore.Data;
 using EcommerceStore.Model;
 using EcommerceStore.Serivce;
+using EcommerceStore.Web.Areas.Admin.ViewModel;
 
 namespace EcommerceStore.Web.Areas.Admin.Controllers
 {
@@ -21,8 +22,9 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         // GET: Admin/Category
         public ActionResult Index()
         {
-            var model = categorySerivce.GetAllEcommerceStoreCategories();
-            return View(model);
+            EcommerceStoreCategoryList ecommerceStoreCategoryList = new EcommerceStoreCategoryList();
+           ecommerceStoreCategoryList.categories = categorySerivce.GetAllEcommerceStoreCategories();
+            return View(ecommerceStoreCategoryList);
         }
 
         //public ActionResult Listing()
@@ -39,38 +41,70 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public JsonResult Action([Bind(Include = "Id,Name,CategoryImage")] Category CategoryModel,HttpPostedFileBase CategoryImage)
+        public JsonResult Action([Bind(Include = "Id,Name,CategoryImage")] Category CategoryModel,HttpPostedFileBase CategoryImage,int? Id)
         {
             JsonResult json = new JsonResult();
-
+            Category category = new Category();
             bool result = false;
 
-
-
-            Category category = new Category();
-
-            string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
-            if (!Directory.Exists(FilePath))
+            if (Id != null)
             {
-                Directory.CreateDirectory(FilePath);
-            }
-            string FileName = Path.GetFileName(CategoryImage.FileName);
-            string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
-            string exesption = Path.GetExtension(CategoryImage.FileName);
-            string path = Path.Combine(FilePath, _FileName);
-            category.Name = CategoryModel.Name;
-            category.CategoryImage = "~/Areas/Admin/Image/CategoryImage/" + _FileName;
-            if(exesption.ToLower() == ".jpg" || exesption.ToLower() == ".jepg" || exesption.ToLower() == ".png")
-            {
-                if(CategoryImage.ContentLength < 10000000)
+                category = db.Categories.Find(Id);
+
+                string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
+
+                string FileName = Path.GetFileName(CategoryImage.FileName);
+                string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
+                string Exesption = Path.GetExtension(CategoryImage.FileName);
+                string path = Path.Combine(FilePath, _FileName);
+                category.Name = CategoryModel.Name;
+                category.CategoryImage = CategoryModel.CategoryImage;
+                var OldCategoryImage = Request.MapPath(category.CategoryImage.ToString());
+                if(Exesption.ToLower() == ".png" || Exesption.ToLower() == ".jepg" || Exesption.ToLower() == ".jpg")
                 {
-                    result = categorySerivce.SaveEcommerceStoreCategory(category);
-                    if (result)
+                    if(CategoryImage.ContentLength < 10000000)
                     {
-                        CategoryImage.SaveAs(path);
+                        result = categorySerivce.EditEcommerceStoreCategory(category);
+                        if (result)
+                        {
+                            CategoryImage.SaveAs(path);
+                            if (System.IO.File.Exists(OldCategoryImage))
+                            {
+                                System.IO.File.Delete(OldCategoryImage);
+                            }
+                        }
                     }
                 }
             }
+            else
+            {
+                string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
+                if (!Directory.Exists(FilePath))
+                {
+                    Directory.CreateDirectory(FilePath);
+                }
+                string FileName = Path.GetFileName(CategoryImage.FileName);
+                string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
+                string exesption = Path.GetExtension(CategoryImage.FileName);
+                string path = Path.Combine(FilePath, _FileName);
+                category.Name = CategoryModel.Name;
+                category.CategoryImage = "~/Areas/Admin/Image/CategoryImage/" + _FileName;
+                if(exesption.ToLower() == ".jpg" || exesption.ToLower() == ".jepg" || exesption.ToLower() == ".png")
+                {
+                    if(CategoryImage.ContentLength < 10000000)
+                    {
+                        result = categorySerivce.SaveEcommerceStoreCategory(category);
+                        if (result)
+                        {
+                            CategoryImage.SaveAs(path);
+                        }
+                    }
+                }
+            }
+
+          
+
+            
 
             if (result)
             {

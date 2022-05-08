@@ -1,39 +1,29 @@
-﻿@model IEnumerable<EcommerceStore.Model.Category>
+﻿@model EcommerceStore.Web.Areas.Admin.ViewModel.EcommerceStoreCategoryList
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Fee Per Night</th>
-            <th scope="col">Accomodation Type</th>
-            <th scope="col">Actions</th>
+            <th scope="col">編號</th>
+            <th scope="col">名字</th>
+            <th scope="col">圖片</th>
+
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2" class="table-active">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2" class="table-active">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2" class="table-active">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2" class="table-active">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2" class="table-active">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
+        @foreach (var CategoryItem in Model.categories)
+        {
+            <tr>
+                <th scope="row">@CategoryItem.Id</th>
+                <td colspan="2" class="table-active">@CategoryItem.Name</td>
+                <td>
+                    <img src="@Url.Content(CategoryItem.CategoryImage)" title="@CategoryItem.Name" />
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        }
+
+
     </tbody>
 </table>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EcommerceStore.Data;
 using EcommerceStore.Model;
 using System.Web;
-
+using System.Data.Entity;
 
 namespace EcommerceStore.Serivce
 {
@@ -25,6 +25,13 @@ namespace EcommerceStore.Serivce
             var context = new EcommerceStoreContext();
 
             context.Categories.Add(category);
+            return context.SaveChanges() > 0;
+        }
+
+        public bool EditEcommerceStoreCategory(Category category)
+        {
+            EcommerceStoreContext context = new EcommerceStoreContext();
+            context.Entry(category).State = EntityState.Modified;
             return context.SaveChanges() > 0;
         }
        
