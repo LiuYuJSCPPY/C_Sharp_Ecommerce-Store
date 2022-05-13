@@ -15,6 +15,6 @@ namespace EcommerceStore.Model
         public string Name { get; set; }
         public string CategoryImage { get; set; }
 
-        public  ICollection<Proudct> Proudcts { get; set; }
+        public ICollection<Proudct> Proudcts { get; set; }
     }
 }
