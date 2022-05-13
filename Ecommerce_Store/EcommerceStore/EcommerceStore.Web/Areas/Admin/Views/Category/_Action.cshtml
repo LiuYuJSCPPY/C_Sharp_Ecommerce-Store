@@ -1,33 +1,51 @@
-﻿
+﻿@model EcommerceStore.Web.Areas.Admin.ViewModel.EcommerceStoreViewCategory
 
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+
+            @if (Model.Id > 0)
+            {
+
+
+                <h5 class="modal-title" id="exampleModalLabel">Edit EcommerceStore Category</h5>
+            }
+            else
+            {
+                <h5 class="modal-title" id="exampleModalLabel">Create EcommerceStore Category</h5>
+            }
+
+
+
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form class="row g-3" id="ActionForm">
+                <input name="Id" value="@Model.Id" type="hidden"/>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">分類的名字:</label>
+                    <input type="text" class="form-control" name="Name" id="CategoryName" placeholder="分類的名字" value="@Model.Name">
+                </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">上傳圖案:</label>
+                    <input class="form-control" type="file" name="CategoryImage" id="formFile" value="">
+                    <img id="ActionImage" src="" />
+                </div>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button id="DataSaveButton" type="button" class="btn btn-primary">儲存</button>
+        </div>
     </div>
-    <div class="modal-body">
-
-        <form class="row g-3" id="ActionForm">
-            <div class="mb-3">
-                <label for="formGroupExampleInput" class="form-label">分類的名字:</label>
-                <input type="text" class="form-control" name="Name" id="CategoryName" placeholder="分類的名字">
-            </div>
-            <div class="mb-3">
-                <label for="formFile" class="form-label">上傳圖案:</label>
-                <input class="form-control" type="file" name="CategoryImage" id="formFile">
-                <img id="ActionImage" src="#" />
-            </div>
-        </form>
-
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="DataSaveButton" type="button" class="btn btn-primary">儲存</button>
-    </div>
-</div>
+}
 
 
-<div id="UpdataError" >
+
+<div id="UpdataError">
 
 </div>
 
@@ -47,8 +65,8 @@
     };
 
 
-    
-    
+
+
 
     $("#DataSaveButton").click(function () {
 
@@ -75,5 +93,5 @@
         });
     });
 
-    
+
 </script>

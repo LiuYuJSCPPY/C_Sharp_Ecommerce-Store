@@ -1,29 +1,40 @@
 ﻿@model EcommerceStore.Web.Areas.Admin.ViewModel.EcommerceStoreCategoryList
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">編號</th>
-            <th scope="col">名字</th>
-            <th scope="col">圖片</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var CategoryItem in Model.categories)
-        {
+@if (Model != null && Model.categories.Count() > 0)
+{
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <th scope="row">@CategoryItem.Id</th>
-                <td colspan="2" class="table-active">@CategoryItem.Name</td>
-                <td>
-                    <img src="@Url.Content(CategoryItem.CategoryImage)" title="@CategoryItem.Name" />
-                </td>
-                <td>
+                <th scope="col">編號</th>
+                <th scope="col">名字</th>
+                <th scope="col">圖片</th>
 
-                </td>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var CategoryItem in Model.categories)
+            {
+                <tr>
+                    <th scope="row">@CategoryItem.Id</th>
+                    <td colspan="2" class="table-active">@CategoryItem.Name</td>
+                    <td>
+                        <img src="@Url.Content(CategoryItem.CategoryImage)" title="@CategoryItem.Name" />
+                    </td>
+                    <td>
+                        <button id="ActionButton" data-href="@Url.Action("Action", "Category", new { Id = CategoryItem.Id })" type="button" class="data-btn btn btn-success" data-bs-toggle="modal" data-bs-target="#Action">更新</button>
+                        <button data-href="@Url.Action("Delete", "Category", new { ID = CategoryItem.Id })" type="button" class="data-btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#Action"><i class="fas fa-trash-alt mr-1"></i>刪除</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+
+<div class="alert alert-warning" role="alert">
+    抱歉! 現在沒有資料!
+</div>
+}
 
 
-    </tbody>
-</table>

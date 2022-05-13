@@ -33,23 +33,35 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         //    return View();
         //}
 
-        public ActionResult Action()
+        public ActionResult Action(int? Id)
         {
-            return PartialView("_Action");
+            var model = new EcommerceStoreViewCategory();
+
+            if(Id.HasValue)
+            {
+                var categroy = categorySerivce.GetCategroyId(Id.Value);
+                model.Id = categroy.Id;
+                model.Name = categroy.Name;
+                model.CategroyImage = categroy.CategoryImage;
+            }
+
+            return PartialView("_Action", model);
         }
 
 
 
         [HttpPost]
-        public JsonResult Action([Bind(Include = "Id,Name,CategoryImage")] Category CategoryModel,HttpPostedFileBase CategoryImage,int? Id)
+        public JsonResult Action([Bind(Include = "Id,Name,CategoryImage")] Category CategoryModel,HttpPostedFileBase CategoryImage)
         {
             JsonResult json = new JsonResult();
-            Category category = new Category();
+            
             bool result = false;
 
-            if (Id != null)
+            if (CategoryModel.Id > 0)
             {
-                category = db.Categories.Find(Id);
+                var OldCategoryImage = Request.MapPath(db.Categories.Find(CategoryModel.Id).CategoryImage.ToString()); 
+                
+                Category category = new Category();
 
                 string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
 
@@ -57,9 +69,11 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
                 string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
                 string Exesption = Path.GetExtension(CategoryImage.FileName);
                 string path = Path.Combine(FilePath, _FileName);
+
+                category.Id = CategoryModel.Id;
                 category.Name = CategoryModel.Name;
-                category.CategoryImage = CategoryModel.CategoryImage;
-                var OldCategoryImage = Request.MapPath(category.CategoryImage.ToString());
+                category.CategoryImage = "~/Areas/Admin/Image/CategoryImage/" + _FileName;
+
                 if(Exesption.ToLower() == ".png" || Exesption.ToLower() == ".jepg" || Exesption.ToLower() == ".jpg")
                 {
                     if(CategoryImage.ContentLength < 10000000)
@@ -67,10 +81,12 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
                         result = categorySerivce.EditEcommerceStoreCategory(category);
                         if (result)
                         {
+
                             CategoryImage.SaveAs(path);
                             if (System.IO.File.Exists(OldCategoryImage))
                             {
                                 System.IO.File.Delete(OldCategoryImage);
+                              
                             }
                         }
                     }
@@ -78,28 +94,38 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
             }
             else
             {
-                string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
-                if (!Directory.Exists(FilePath))
+                Category category = new Category();
+                if(CategoryImage != null)
                 {
-                    Directory.CreateDirectory(FilePath);
-                }
-                string FileName = Path.GetFileName(CategoryImage.FileName);
-                string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
-                string exesption = Path.GetExtension(CategoryImage.FileName);
-                string path = Path.Combine(FilePath, _FileName);
-                category.Name = CategoryModel.Name;
-                category.CategoryImage = "~/Areas/Admin/Image/CategoryImage/" + _FileName;
-                if(exesption.ToLower() == ".jpg" || exesption.ToLower() == ".jepg" || exesption.ToLower() == ".png")
-                {
-                    if(CategoryImage.ContentLength < 10000000)
+                    string FilePath = Server.MapPath("~/Areas/Admin/Image/CategoryImage/");
+                    if (!Directory.Exists(FilePath))
                     {
-                        result = categorySerivce.SaveEcommerceStoreCategory(category);
-                        if (result)
+                        Directory.CreateDirectory(FilePath);
+                    }
+                    string FileName = Path.GetFileName(CategoryImage.FileName);
+                    string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
+                    string exesption = Path.GetExtension(CategoryImage.FileName);
+                    string path = Path.Combine(FilePath, _FileName);
+                    category.Name = CategoryModel.Name;
+                    category.CategoryImage = "~/Areas/Admin/Image/CategoryImage/" + _FileName;
+                    if(exesption.ToLower() == ".jpg" || exesption.ToLower() == ".jepg" || exesption.ToLower() == ".png")
+                    {
+                        if(CategoryImage.ContentLength < 10000000)
                         {
-                            CategoryImage.SaveAs(path);
+                            result = categorySerivce.SaveEcommerceStoreCategory(category);
+                            if (result)
+                            {
+                                CategoryImage.SaveAs(path);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    category.Name = CategoryModel.Name;
+                    result = categorySerivce.SaveEcommerceStoreCategory(category);
+                }
+               
             }
 
           
@@ -119,62 +145,9 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
             return json;
         }
 
-        // GET: Admin/Category/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Category/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CategoryImage")] Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Categories.Add(category);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(category);
-        }
-
-        // GET: Admin/Category/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Category category = db.Categories.Find(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
-        }
-
-        // POST: Admin/Category/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,CategoryImage")] Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(category);
-        }
-
+     
         // GET: Admin/Category/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
             if (id == null)
             {
@@ -185,18 +158,29 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return PartialView("_Delete", category);
         }
 
         // POST: Admin/Category/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        
+        public JsonResult Delete(Category category)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            JsonResult json = new JsonResult ();
+            bool Result = false;
+            var DeleteCategroy = categorySerivce.GetCategroyId(category.Id);
+            Result = categorySerivce.DeleteEcommerceStoreCategroy(DeleteCategroy);
+
+            if (Result)
+            {
+                json.Data = new { Success = true };
+            }
+            else
+            {
+                json.Data = new { Success = false, Message = "刪除失敗!" };
+            }
+            return json;
         }
 
         protected override void Dispose(bool disposing)

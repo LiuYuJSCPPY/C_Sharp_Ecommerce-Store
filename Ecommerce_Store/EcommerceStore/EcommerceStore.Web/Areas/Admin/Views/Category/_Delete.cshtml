@@ -1,0 +1,55 @@
+﻿@model EcommerceStore.Model.Category
+@{
+    ViewBag.Title = "_Delete";
+}
+
+
+
+<div class="modal-content">
+    <div class="modal-header">
+
+
+        <h5 class="modal-title" id="exampleModalLabel">刪除分類</h5>
+
+
+
+
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+
+        <form class="row g-3" id="ActionForm">
+            <input name="Id" value="@Model.Id" type="hidden" />
+        </form>
+
+        <div class="alert alert-danger" role="alert">
+            你確定要刪除嗎?
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="DeleteButton" type="button" class="btn btn-primary">刪除</button>
+    </div>
+</div>
+
+
+<div id="DeleteError">
+
+</div>
+<script>
+    $("#DeleteButton").click(function () {
+        $.ajax({
+            url: "@Url.Action("Delete", "Category")",
+            type: "post",
+            data: $("#ActionForm").serialize()
+        }).done(function (response) {
+            debugger;
+            if (response.Success) {
+               window.location.href = "@Url.Action("Index", "Category")";
+            } else {
+                $("#DeleteError").html(response.message);
+            }
+        })
+    })
+</script>

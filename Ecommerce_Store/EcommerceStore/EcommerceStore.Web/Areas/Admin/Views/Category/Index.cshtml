@@ -18,7 +18,7 @@
                 <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons">
                 <button class="btn btn-outline-secondary" type="button">Button</button>
                 <button class="btn btn-outline-secondary" type="button">Button</button>
-                <button id="ActionButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Action">
+                <button id="ActionButton" data-href="@Url.Action("Action","Category")" type="button" class="data-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#Action">
                     Create
                 </button>
 
@@ -50,10 +50,10 @@
 </div>
 
 <script>
-    $("#ActionButton").click(function () {
+    $(".data-btn").click(function () {
         $.ajax({
-            url: "@Url.Action("Action", "Category")",
-            type: "Get",
+            url: $(this).attr("data-href")
+            
         }).done(function (response) {
             $("#Action .modal-dialog").html(response);
         });

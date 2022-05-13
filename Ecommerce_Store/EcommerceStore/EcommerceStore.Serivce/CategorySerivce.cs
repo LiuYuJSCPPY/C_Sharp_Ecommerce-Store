@@ -7,6 +7,7 @@ using EcommerceStore.Data;
 using EcommerceStore.Model;
 using System.Web;
 using System.Data.Entity;
+using System.IO;
 
 namespace EcommerceStore.Serivce
 {
@@ -20,6 +21,12 @@ namespace EcommerceStore.Serivce
 
 
 
+        public Category GetCategroyId (int Id)
+        {
+            var context = new EcommerceStoreContext();
+            return context.Categories.Find(Id);
+        }
+
         public bool SaveEcommerceStoreCategory(Category category)
         {
             var context = new EcommerceStoreContext();
@@ -30,9 +37,23 @@ namespace EcommerceStore.Serivce
 
         public bool EditEcommerceStoreCategory(Category category)
         {
-            EcommerceStoreContext context = new EcommerceStoreContext();
-            context.Entry(category).State = EntityState.Modified;
-            return context.SaveChanges() > 0;
+           var Context = new EcommerceStoreContext();
+            Context.Entry(category).State =EntityState.Modified;
+            return Context.SaveChanges() > 0;
+        }
+
+        public bool DeleteEcommerceStoreCategroy(Category category)
+        {
+            var context = new EcommerceStoreContext();
+          
+            if (File.Exists(category.CategoryImage))
+            {
+                File.Delete(category.CategoryImage);
+                
+            }
+            
+            context.Entry(category).State = EntityState.Deleted;
+            return context.SaveChanges()>0;
         }
        
        
