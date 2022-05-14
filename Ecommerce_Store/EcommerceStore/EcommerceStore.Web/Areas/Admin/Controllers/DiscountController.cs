@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using EcommerceStore.Data;
 using EcommerceStore.Model;
+using EcommerceStore.Web.Areas.Admin.ViewModel;
 using EcommerceStore.Serivce;
 
 namespace EcommerceStore.Web.Areas.Admin.Controllers
@@ -21,9 +22,23 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         // GET: Admin/Discount
         public async Task<ActionResult> Index()
         {
+            EcommerceStoreDiscountList ecommerceStoreDiscountList =new EcommerceStoreDiscountList ();
+            ecommerceStoreDiscountList.discounts =discountSerivce.GetAllEcommerceDiscounts();
 
-            return View(await db.Discounts.ToListAsync());
+            return View(ecommerceStoreDiscountList);
         }
+
+
+        //public ActionResult Listing()
+        //{
+        //    return PartialView("_Listing");
+        //}
+
+        public ActionResult Action()
+        {
+            return PartialView("_Action");
+        }
+
 
         // GET: Admin/Discount/Details/5
         public async Task<ActionResult> Details(int? id)
