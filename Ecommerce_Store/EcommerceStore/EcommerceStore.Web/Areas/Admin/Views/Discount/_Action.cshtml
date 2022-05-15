@@ -42,7 +42,7 @@
 
             <div class="mb-3">
                 <h4 for="formFile" class="form-label">活動圖片</h4>
-                <input id="DiscountImage" class="form-control" name="DescriptImage" type="file" id="formFile">
+                <input id="DiscountImageView" class="form-control" name="DiscountImage" type="file" id="formFile">
                 <div class="text-center">
                     <img id="DiscountImageView" src="" class="rounded" width="200">
                 </div>
@@ -50,19 +50,11 @@
             </div>
 
 
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" value="ture" name="enabled" id="DiscountEnabled">
-                <label class="form-check-label">
-                    開啟
-                </label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" name="enabled" id="DiscountEnabledTrue">
+                <label class="form-check-label" for="flexSwitchCheckDefault">是否公開</label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" value="false" name="enabled" id="DiscountEnabled" checked>
-                <label class="form-check-label">
-                    關閉
-                </label>
-            </div>
+            
         </form>
     </div>
     <div class="modal-footer">
@@ -92,19 +84,21 @@
 
     $("#SaveButton").click(function () {
 
+
+
         var DiscountFormData = new FormData;
         var Name = $("#DiscountName").val();
         var Description = $("#DescriptionDiscount").val();
-        var Discountfile = $("#DiscountImage")[0].files[0];
+        var DiscountImage = $("#DiscountImageView")[0].files[0];
         var Preceint = $("#Discountpreceint").val();
-        var DiscountEnabled = $("#DiscountEnabled").val();
+        var DiscountEnabled = $("#DiscountEnabledTrue").val();
         var StartDisocunt = $("#StartDiscountTime").val();
         var EndDiscount = $("#EndDiscountTime").val();
         
 
         DiscountFormData.append("Name", Name);
         DiscountFormData.append("Description", Description);
-        DiscountFormData.append("DescriptionImage", Discountfile);
+        DiscountFormData.append("DiscountImage", DiscountImage);
         DiscountFormData.append("DiscountPreceint", Preceint);
         DiscountFormData.append("enabled", DiscountEnabled);
         DiscountFormData.append("StartDiscount", StartDisocunt);
@@ -113,6 +107,8 @@
         $.ajax({
             url: "@Url.Action("Action","Discount")",
             type: "POST",
+            processData: false,
+            contentType: false,
             data: DiscountFormData,
         }).done(function (response) {
             debugger;

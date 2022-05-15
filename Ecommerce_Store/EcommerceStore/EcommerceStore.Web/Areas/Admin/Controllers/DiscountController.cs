@@ -41,29 +41,29 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult Action([Bind(Include = "Id,Name,Description,DescriptImage,DiscountPreceint,enabled,StartDiscount,EndDiscount,Create_at,Modified_at")] Discount discount,HttpPostedFileBase DiscountImage )
+        public JsonResult Action([Bind(Include = "Id,Name,Description,DescriptImage,DiscountPreceint,enabled,StartDiscount,EndDiscount,Create_at,Modified_at")] Discount discount, HttpPostedFileBase DiscountImage)
         {
             JsonResult json = new JsonResult();
             var Result = false;
 
+
+
+
             
-
-
-
-            string FilePath = Server.MapPath("Areas/Admin/Image/Discount/");
+            string FilePath = Server.MapPath("~/Areas/Admin/Image/Discount/");
             if (!Directory.Exists(FilePath))
             {
                 Directory.CreateDirectory(FilePath);
             }
             string FileName = Path.GetFileName(DiscountImage.FileName);
-            string _FileName = DateTime.Now.ToString() + FileName;
+            string _FileName = DateTime.Now.ToString("yyyymmssfff") + FileName;
             string exesption = Path.GetExtension(DiscountImage.FileName);
-            string _FilePath = Path.Combine(FilePath, _FileName);
+            string path = Path.Combine(FilePath, _FileName);
+       
 
-            
             discount.Create_at = DateTime.Now;
             discount.Modified_at = DateTime.Now;
-            discount.DescriptImage = "Areas/Admin/Image/Discount/" + _FileName;
+            discount.DescriptImage = "~/Areas/Admin/Image/Discount/" + _FileName;
 
             if (exesption.ToLower() == ".png" || exesption.ToLower() == ".peng" || exesption.ToLower() == ".jpg")
             {
@@ -72,7 +72,7 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
                     Result = discountSerivce.SaveEcommerceStoreDiscounts(discount);
                     if (Result)
                     {
-                        DiscountImage.SaveAs(_FilePath);
+                        DiscountImage.SaveAs(path);
                     }
                 }
             }
