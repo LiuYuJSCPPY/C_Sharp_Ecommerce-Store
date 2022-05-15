@@ -16,6 +16,10 @@ namespace EcommerceStore.Model
         public string Description { get; set; }
         public string DescriptImage { get; set; }
         public decimal DiscountPreceint { get; set; }
+        public bool enabled { get; set; }
+
+        public DateTime? StartDiscount { get; set; }
+        public DateTime? EndDiscount { get; set; }
         public DateTime? Create_at { get; set; }
         public DateTime? Modified_at { get; set; }
     }

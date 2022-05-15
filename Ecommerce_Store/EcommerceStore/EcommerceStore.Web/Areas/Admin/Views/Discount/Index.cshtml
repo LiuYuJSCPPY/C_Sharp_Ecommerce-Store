@@ -9,6 +9,11 @@
 
 
 
+<!-- Button trigger modal -->
+<button id="CreateButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ActionModal">
+    新增
+</button>
+
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered align-middle">
@@ -18,6 +23,7 @@
                 <th>名字</th>
                 <th>介紹</th>
                 <th>折扣</th>
+                <th>活動日期</th>
                 <th>圖片</th>
 
             </tr>
@@ -27,6 +33,7 @@
                 @foreach (var Discount in Model.discounts)
                 {
                     <td>@Discount.Id</td>
+
                     <td>@Discount.Name</td>
                     <td>@Discount.DiscountPreceint</td>
                     <td>@Discount.Description</td>
@@ -44,15 +51,11 @@
 </div>
 
 
-<!-- Button trigger modal -->
-<button id="CreateButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ActionModal">
-    新增
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="ActionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        
+
     </div>
 </div>
 
@@ -61,7 +64,7 @@
     $("#CreateButton").click(function () {
         $.ajax({
             url: "@Url.Action("Action", "Discount")",
-            
+
         }).done(function (response) {
             $("#ActionModal .modal-dialog").html(response);
         });

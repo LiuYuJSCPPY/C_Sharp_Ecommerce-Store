@@ -23,5 +23,15 @@ namespace EcommerceStore.Serivce
 
 
 
+        public bool SaveEcommerceStoreDiscounts(Discount discount )
+        {
+
+            EcommerceStoreContext Context = new EcommerceStoreContext();
+            
+            Context.Discounts.Add(discount);
+
+            return Context.SaveChanges() > 0;
+        }
+
     }
 }

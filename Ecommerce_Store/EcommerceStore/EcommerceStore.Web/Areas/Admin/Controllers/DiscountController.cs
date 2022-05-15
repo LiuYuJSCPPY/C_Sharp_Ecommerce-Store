@@ -11,6 +11,7 @@ using EcommerceStore.Data;
 using EcommerceStore.Model;
 using EcommerceStore.Web.Areas.Admin.ViewModel;
 using EcommerceStore.Serivce;
+using System.IO;
 
 namespace EcommerceStore.Web.Areas.Admin.Controllers
 {
@@ -39,6 +40,57 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
             return PartialView("_Action");
         }
 
+        [HttpPost]
+        public JsonResult Action([Bind(Include = "Id,Name,Description,DescriptImage,DiscountPreceint,enabled,StartDiscount,EndDiscount,Create_at,Modified_at")] Discount discount,HttpPostedFileBase DiscountImage )
+        {
+            JsonResult json = new JsonResult();
+            var Result = false;
+
+            
+
+
+
+            string FilePath = Server.MapPath("Areas/Admin/Image/Discount/");
+            if (!Directory.Exists(FilePath))
+            {
+                Directory.CreateDirectory(FilePath);
+            }
+            string FileName = Path.GetFileName(DiscountImage.FileName);
+            string _FileName = DateTime.Now.ToString() + FileName;
+            string exesption = Path.GetExtension(DiscountImage.FileName);
+            string _FilePath = Path.Combine(FilePath, _FileName);
+
+            
+            discount.Create_at = DateTime.Now;
+            discount.Modified_at = DateTime.Now;
+            discount.DescriptImage = "Areas/Admin/Image/Discount/" + _FileName;
+
+            if (exesption.ToLower() == ".png" || exesption.ToLower() == ".peng" || exesption.ToLower() == ".jpg")
+            {
+                if(DiscountImage.ContentLength < 10000000000)
+                {
+                    Result = discountSerivce.SaveEcommerceStoreDiscounts(discount);
+                    if (Result)
+                    {
+                        DiscountImage.SaveAs(_FilePath);
+                    }
+                }
+            }
+
+
+            if (Result)
+            {
+                json.Data = new { Success = true };
+
+            }
+            else
+            {
+                json.Data = new { Success = false ,Message = "新增尚未成功!"};
+            }
+
+
+            return json;
+        }
 
         // GET: Admin/Discount/Details/5
         public async Task<ActionResult> Details(int? id)
