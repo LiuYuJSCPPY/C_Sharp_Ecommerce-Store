@@ -21,6 +21,12 @@ namespace EcommerceStore.Serivce
             return context.Categories.ToList();
         }
 
+        public Discount GetEcommerceStoreDiscountID(int Id)
+        {
+            EcommerceStoreContext context = new EcommerceStoreContext();
+            return context.Discounts.Find(Id);
+        }
+
 
 
         public bool SaveEcommerceStoreDiscounts(Discount discount )

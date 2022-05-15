@@ -35,9 +35,23 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         //    return PartialView("_Listing");
         //}
 
-        public ActionResult Action()
+        public ActionResult Action(int? Id)
         {
-            return PartialView("_Action");
+            EcommerceStoreDiscount ecommerceStoreDiscount = new EcommerceStoreDiscount ();
+            if (Id.HasValue)
+            {
+                var Discount = discountSerivce.GetEcommerceStoreDiscountID(Id.Value);
+                ecommerceStoreDiscount.Id = Id.Value;
+                ecommerceStoreDiscount.Name = Discount.Name;
+                ecommerceStoreDiscount.StartDiscount = Discount.StartDiscount;
+                ecommerceStoreDiscount.DescriptImage = Discount.DescriptImage;
+                ecommerceStoreDiscount.Description = Discount.Description;
+                ecommerceStoreDiscount.DiscountPreceint = Discount.DiscountPreceint;
+                ecommerceStoreDiscount.enabled = Discount.enabled;
+                ecommerceStoreDiscount.EndDiscount = Discount.EndDiscount;
+
+            }
+            return PartialView("_Action", ecommerceStoreDiscount);
         }
 
         [HttpPost]
