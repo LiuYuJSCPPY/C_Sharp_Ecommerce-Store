@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EcommerceStore.Model;
 using EcommerceStore.Data;
+using System.Data.Entity;
 
 namespace EcommerceStore.Serivce
 {
@@ -39,5 +40,26 @@ namespace EcommerceStore.Serivce
             return Context.SaveChanges() > 0;
         }
 
+        public bool EditEcommerceStoreDiscounts(Discount discount)
+        {
+            EcommerceStoreContext Context = new EcommerceStoreContext();
+            Context.Entry(discount).State = EntityState.Modified;
+
+            return Context.SaveChanges() > 0;
+        }
+
+        public bool DeleteEcommerceStoreDiscounts(Discount discount)
+        {
+            var context = new EcommerceStoreContext();
+          
+            string OldDiscountImage = discount.DescriptImage;
+            if (System.IO.File.Exists(discount.DescriptImage))
+            {
+                System.IO.File.Delete(discount.DescriptImage);
+            }
+
+            context.Entry(discount).State = EntityState.Deleted;
+            return context.SaveChanges() > 0;
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Decsription,Stock_Keep,CategoryId,price,DiscountId,ProudctImage,Create_at,Modified_at")] Proudct proudct,ProudctImage proudctImage,HttpPostedFileBase Proudcts)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Decsription,Stock_Keep,CategoryId,price,DiscountId,ProudctImage")] Proudct proudct,ProudctImage proudctImage,HttpPostedFileBase Proudcts)
         {
             if (ModelState.IsValid)
             {

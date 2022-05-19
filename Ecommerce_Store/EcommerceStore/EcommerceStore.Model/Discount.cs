@@ -18,9 +18,19 @@ namespace EcommerceStore.Model
         public decimal DiscountPreceint { get; set; }
         public bool enabled { get; set; }
 
-        public DateTime? StartDiscount { get; set; }
-        public DateTime? EndDiscount { get; set; }
+       
+        [Column(TypeName = "Date")]
+        [DataType(DataType.Date)]
+        public DateTime StartDiscount { get; set; }
+
+     
+        [Column(TypeName = "Date")]
+        [DataType(DataType.Date)]
+        public DateTime EndDiscount { get; set; }
         public DateTime? Create_at { get; set; }
         public DateTime? Modified_at { get; set; }
+
+
+        public virtual ICollection<Proudct> Proudcts { get; set; }
     }
 }

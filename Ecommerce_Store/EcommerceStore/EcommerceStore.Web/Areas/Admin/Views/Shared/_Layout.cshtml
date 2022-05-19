@@ -9,14 +9,15 @@
     <title>Dashboard Template · Bootstrap v5.1</title>
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
-
-
-
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.structure.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.theme.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.js"></script>
     <!-- Bootstrap core CSS -->
 
     <link href="~/CSS/dashboardcss/dashboard.css" rel="stylesheet" />
     <link href="~/CSS/css/bootstrap.min.css" rel="stylesheet" />
-   
+
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -70,7 +71,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="@Url.Action("Index","Proudct")">
                                 <span data-feather="shopping-cart"></span>
                                 商品管理
                             </a>
@@ -82,7 +83,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index","Discount")">
+                            <a class="nav-link" href="@Url.Action("Index","Discounts")">
                                 <span data-feather="bar-chart-2"></span>
                                 折扣活動
                             </a>
