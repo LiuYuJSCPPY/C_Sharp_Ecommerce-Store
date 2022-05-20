@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -17,20 +16,20 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         private EcommerceStoreContext db = new EcommerceStoreContext();
 
         // GET: Admin/Proudct
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             var proudcts = db.Proudcts.Include(p => p.Category).Include(p => p.Discount);
-            return View(await proudcts.ToListAsync());
+            return View(proudcts.ToList());
         }
 
         // GET: Admin/Proudct/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Proudct proudct = await db.Proudcts.FindAsync(id);
+            Proudct proudct = db.Proudcts.Find(id);
             if (proudct == null)
             {
                 return HttpNotFound();
@@ -51,12 +50,12 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Decsription,Stock_Keep,CategoryId,price,DiscountId,ProudctImage")] Proudct proudct,ProudctImage proudctImage,HttpPostedFileBase Proudcts)
+        public ActionResult Create([Bind(Include = "Id,Name,Decsription,Stock_Keep,CategoryId,price,DiscountId,ProudctImage,Create_at,Modified_at")] Proudct proudct)
         {
             if (ModelState.IsValid)
             {
                 db.Proudcts.Add(proudct);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -66,13 +65,13 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Proudct/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Proudct proudct = await db.Proudcts.FindAsync(id);
+            Proudct proudct = db.Proudcts.Find(id);
             if (proudct == null)
             {
                 return HttpNotFound();
@@ -87,12 +86,12 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Decsription,Stock_Keep,CategoryId,price,DiscountId,ProudctImage,Create_at,Modified_at")] Proudct proudct)
+        public ActionResult Edit([Bind(Include = "Id,Name,Decsription,Stock_Keep,CategoryId,price,DiscountId,ProudctImage,Create_at,Modified_at")] Proudct proudct)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(proudct).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", proudct.CategoryId);
@@ -101,13 +100,13 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Proudct/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Proudct proudct = await db.Proudcts.FindAsync(id);
+            Proudct proudct = db.Proudcts.Find(id);
             if (proudct == null)
             {
                 return HttpNotFound();
@@ -118,11 +117,11 @@ namespace EcommerceStore.Web.Areas.Admin.Controllers
         // POST: Admin/Proudct/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            Proudct proudct = await db.Proudcts.FindAsync(id);
+            Proudct proudct = db.Proudcts.Find(id);
             db.Proudcts.Remove(proudct);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 

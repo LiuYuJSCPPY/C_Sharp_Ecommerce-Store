@@ -22,8 +22,10 @@ namespace EcommerceStore.Model
         public virtual Discount Discount { get; set; }
 
         public string ProudctImage { get; set; }
-        public DateTime? Create_at { get; set; }
-        public DateTime? Modified_at { get; set; }
+
+
+        public DateTime Create_at { get; set; }
+        public DateTime Modified_at { get; set; }
 
         public virtual ICollection<ProudctImage> ProudctImages { get; set; }
         public virtual ICollection<CartItem> CartItems { get; set; }

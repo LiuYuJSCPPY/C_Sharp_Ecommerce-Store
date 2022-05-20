@@ -81,6 +81,7 @@
     <Compile Include="CategorySerivce.cs" />
     <Compile Include="DiscountSerive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProudctSerivce.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EcommerceStore.Data\EcommerceStore.Data.csproj">
